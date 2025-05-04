@@ -8,7 +8,7 @@ import { UserDetailContext } from "@/context/userDetailContext";
 import { useSession } from "next-auth/react";
 import { IUserDetails } from "@/types/userDetails";
 
-const Providers = ({ children }: { children: React.ReactNode }) => {
+const ClientProviders = ({ children }: { children: React.ReactNode }) => {
   const [messages] = useState([]);
   const setMessages = (message: { role: string; content: string }) => {};
 
@@ -43,4 +43,4 @@ const Providers = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-export default Providers;
+export default ClientProviders;
