@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useTheme } from "next-themes";
-import { Moon, Sun, Laptop, LogOut, User } from "lucide-react";
+import { Moon, Sun, Laptop, LogOut, User, Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { signOut, useSession } from "next-auth/react";
 
@@ -14,6 +14,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
   DropdownMenuSeparator,
+  DropdownMenuGroup,
+  DropdownMenuLabel,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import SIgninDialog from "./SIgnin.Dialog";
@@ -48,30 +50,39 @@ export function Header() {
       )}
     >
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
-        <div className="flex items-center gap-2 rounded-md border px-2 py-1">
+        {/* Brand Logo - Visible on all screens */}
+        <Link href="/" className="flex items-center gap-2">
           <span className="font-bold text-xl">🧠</span>
+          <span className="hidden sm:inline-block font-semibold">
+            YourBrand
+          </span>
+        </Link>
+
+        {/* Desktop Navigation */}
+        <nav className="hidden md:flex items-center gap-1 rounded-md border px-2 py-1">
           <Link
             href="/pricing"
-            className="font-semibold text-sm px-2 py-1 hover:underline"
+            className="font-medium text-sm px-3 py-1 rounded hover:bg-accent transition-colors"
           >
             Pricing
           </Link>
           <Link
             href="/accounts"
-            className="font-semibold text-sm px-2 py-1 hover:underline"
+            className="font-medium text-sm px-3 py-1 rounded hover:bg-accent transition-colors"
           >
             Accounts
           </Link>
           <Link
             href="/blog"
-            className="font-semibold text-sm px-2 py-1 hover:underline"
+            className="font-medium text-sm px-3 py-1 rounded hover:bg-accent transition-colors"
           >
             Blog
           </Link>
 
+          {/* Theme Toggle - Desktop */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="ml-2">
+              <Button variant="ghost" size="icon" className="ml-1">
                 {resolvedTheme === "dark" ? (
                   <Moon className="h-4 w-4" />
                 ) : resolvedTheme === "light" ? (
@@ -97,14 +108,68 @@ export function Header() {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
+        </nav>
+
+        {/* Mobile Navigation Dropdown */}
+        <div className="md:hidden">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon">
+                <Menu className="h-5 w-5" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-56" align="end" side="bottom">
+              <DropdownMenuLabel>Navigation</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuGroup>
+                <DropdownMenuItem asChild>
+                  <Link href="/pricing" className="w-full">
+                    Pricing
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/accounts" className="w-full">
+                    Accounts
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/blog" className="w-full">
+                    Blog
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/contact" className="w-full">
+                    Contact
+                  </Link>
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
+              <DropdownMenuSeparator />
+              <DropdownMenuLabel>Theme</DropdownMenuLabel>
+              <DropdownMenuGroup>
+                <DropdownMenuItem onClick={() => setTheme("light")}>
+                  <Sun className="mr-2 h-4 w-4" />
+                  Light
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setTheme("dark")}>
+                  <Moon className="mr-2 h-4 w-4" />
+                  Dark
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setTheme("system")}>
+                  <Laptop className="mr-2 h-4 w-4" />
+                  System
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
 
-        <div className="flex items-center gap-2 rounded-md border px-2 py-1 bg-black text-white dark:bg-white dark:text-black">
-          <Link href="/contact">
+        {/* User/Auth Section */}
+        <div className="flex items-center gap-2">
+          <Link href="/contact" className="hidden md:block">
             <Button
-              variant="ghost"
+              variant="outline"
               size="sm"
-              className="px-2 py-1 text-white dark:text-black hover:bg-gray-100"
+              className="px-3 hover:bg-accent transition-colors"
             >
               Build
             </Button>
@@ -159,10 +224,20 @@ export function Header() {
               <Button
                 variant="default"
                 size="sm"
-                className="bg-white dark:bg-black text-black dark:text-white px-3 py-1 hover:bg-gray-800"
+                className="hidden md:flex bg-black text-white dark:bg-white dark:text-black px-3 hover:bg-gray-800 transition-colors"
                 onClick={() => setShowSignIn(true)}
               >
                 Sign In
+              </Button>
+
+              {/* Mobile Sign In Button */}
+              <Button
+                variant="default"
+                size="icon"
+                className="md:hidden bg-black text-white dark:bg-white dark:text-black"
+                onClick={() => setShowSignIn(true)}
+              >
+                <User className="h-4 w-4" />
               </Button>
 
               <SIgninDialog
