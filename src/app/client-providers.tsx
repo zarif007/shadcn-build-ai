@@ -10,6 +10,7 @@ import { IUserDetails } from "@/types/userDetails";
 
 const ClientProviders = ({ children }: { children: React.ReactNode }) => {
   const [messages] = useState([]);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const setMessages = (message: { role: string; content: string }) => {};
 
   const { data: session } = useSession();
