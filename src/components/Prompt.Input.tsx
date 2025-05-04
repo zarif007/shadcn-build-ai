@@ -12,11 +12,11 @@ const PromptInput = () => {
   const [userInput, setUserInput] = useState("");
   const { messages, setMessages } = useContext(MessagesContext);
   const { userDetails, setUserDetails } = useContext(UserDetailContext);
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [showSignIn, setShowSignIn] = useState(false);
 
   const onGenerate = async (input: string) => {
     if (!userDetails) {
-      setIsOpen(true);
+      setShowSignIn(true);
       return;
     }
     if (!userInput) return;
@@ -62,8 +62,8 @@ const PromptInput = () => {
               </Button>
             </div>
             <SIgninDialog
-              openDialog={isOpen}
-              closeDialog={(value: boolean) => setIsOpen(value)}
+              openDialog={showSignIn}
+              closeDialog={(value: boolean) => setShowSignIn(value)}
             />
           </div>
         </div>

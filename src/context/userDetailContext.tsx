@@ -1,9 +1,10 @@
+import { IUserDetails } from "@/types/userDetails";
 import { createContext } from "react";
 
 export const UserDetailContext = createContext<{
-  userDetails: any;
-  setUserDetails: (userDetails: any) => void;
+  userDetails: IUserDetails | null;
+  setUserDetails: (userDetails: IUserDetails | null) => void;
 }>({
-  userDetails: [],
-  setUserDetails: (userDetails) => {},
+  userDetails: null,
+  setUserDetails: () => {},
 });

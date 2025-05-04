@@ -4,7 +4,7 @@ import PromptInput from "./Prompt.Input";
 const Hero = () => {
   return (
     <div className="h-screen w-full flex items-center justify-center">
-      <div className="absolute inset-0 flex flex-col items-center justify-center gap-6">
+      <div className="absolute inset-0 flex flex-col items-center justify-center gap-6 mx-2">
         <div className="text-center space-y-4">
           <h1 className="text-3xl md:text-6xl font-bold tracking-tight">
             What do you want to{" "}
@@ -14,7 +14,7 @@ const Hero = () => {
             today
           </h1>
           <p className="text-xl text-muted-foreground">
-            Develop anything with the power of{" "}
+            Develop & Document anything with the power of{" "}
             <span className="font-bold text-[black] dark:text-[white]">
               AI + ShadCN UI
             </span>

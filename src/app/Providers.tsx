@@ -1,16 +1,30 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Header } from "@/components/Header";
 import { ThemeProvider } from "../components/providers";
 import { MessagesContext } from "@/context/messagesContext";
 import { UserDetailContext } from "@/context/userDetailContext";
-import { User } from "lucide-react";
+import { useSession } from "next-auth/react";
+import { IUserDetails } from "@/types/userDetails";
 
 const Providers = ({ children }: { children: React.ReactNode }) => {
   const [messages] = useState([]);
-  const [userDetails, setUserDetails] = useState(null);
   const setMessages = (message: { role: string; content: string }) => {};
+
+  const { data: session } = useSession();
+  const [userDetails, setUserDetails] = useState<IUserDetails | null>(null);
+
+  useEffect(() => {
+    if (session?.user?.id) {
+      setUserDetails({
+        id: session.user.id,
+        name: session.user.name,
+        email: session.user.email,
+        image: session.user.image,
+      });
+    }
+  }, [session]);
 
   return (
     <UserDetailContext.Provider value={{ userDetails, setUserDetails }}>
