@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import ClientProviders from "./client-providers";
-import AuthProvider from "./auth-provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,9 +23,7 @@ export default function RootLayout({
           "mx-auto flex min-h-screen flex-col bg-background font-sans antialiased"
         }
       >
-        <AuthProvider>
-          <ClientProviders>{children}</ClientProviders>
-        </AuthProvider>
+        <ClientProviders>{children}</ClientProviders>
       </body>
     </html>
   );

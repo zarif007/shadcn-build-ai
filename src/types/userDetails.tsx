@@ -1,6 +1,7 @@
 export interface IUserDetails {
-  id: string;
-  name?: string | null;
-  email?: string | null;
-  image?: string | null;
+  full_name: string | null;
+  avatar_url: string | null;
+  updated_at?: string | null;
+  bio?: string | null;
+  location?: string | null;
 }

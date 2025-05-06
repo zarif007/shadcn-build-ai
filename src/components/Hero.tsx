@@ -15,9 +15,7 @@ const Hero = () => {
           </h1>
           <p className="text-xl text-muted-foreground">
             Develop & Document anything with the power of{" "}
-            <span className="font-bold text-[black] dark:text-[white]">
-              AI + ShadCN UI
-            </span>
+            <span className="font-bold text-[black] dark:text-[white]">AI</span>
           </p>
         </div>
         <PromptInput />

@@ -3,8 +3,9 @@
 import Link from "next/link";
 import { useTheme } from "next-themes";
 import { Moon, Sun, Laptop, LogOut, User, Menu } from "lucide-react";
-import { useEffect, useState } from "react";
-import { signOut, useSession } from "next-auth/react";
+import { useState, useEffect } from "react";
+import { createClient } from "@/lib/supabase/client";
+import { useSupabaseUser } from "@/lib/supabase/useSupabaseUser";
 
 import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
@@ -28,8 +29,8 @@ export function Header() {
   const { setTheme, resolvedTheme } = useTheme();
   const [showSignIn, setShowSignIn] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const { data: session, status } = useSession();
-  const isLoading = status === "loading";
+  const { user, loading } = useSupabaseUser();
+  const supabase = createClient();
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 10);
@@ -38,10 +39,15 @@ export function Header() {
   }, []);
 
   const getUserInitials = () => {
-    if (!session?.user?.name) return "U";
-    const nameParts = session.user.name.split(" ");
+    if (!user?.user_metadata?.name) return "U";
+    const nameParts = user.user_metadata.name.split(" ");
     if (nameParts.length === 1) return nameParts[0][0];
     return `${nameParts[0][0]}${nameParts[nameParts.length - 1][0]}`;
+  };
+
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+    window.location.href = "/"; // Redirect to home after sign out
   };
 
   return (
@@ -142,15 +148,15 @@ export function Header() {
             </Button>
           </Link>
 
-          {isLoading ? (
+          {loading ? (
             <div className="h-8 w-8 rounded-full bg-gray-300 dark:bg-gray-700 animate-pulse"></div>
-          ) : session ? (
+          ) : user ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Avatar className="h-8 w-8 cursor-pointer">
                   <AvatarImage
-                    src={session.user?.image || undefined}
-                    alt={session.user?.name || "User"}
+                    src={user.user_metadata?.avatar_url || undefined}
+                    alt={user.user_metadata?.name || "User"}
                   />
                   <AvatarFallback className="bg-primary text-primary-foreground">
                     {getUserInitials()}
@@ -160,12 +166,12 @@ export function Header() {
               <DropdownMenuContent className="w-56" align="end">
                 <div className="flex items-center justify-start gap-2 p-2">
                   <div className="flex flex-col space-y-1 leading-none">
-                    {session.user?.name && (
-                      <p className="font-medium">{session.user.name}</p>
+                    {user.user_metadata?.name && (
+                      <p className="font-medium">{user.user_metadata.name}</p>
                     )}
-                    {session.user?.email && (
+                    {user.email && (
                       <p className="w-[200px] truncate text-sm text-muted-foreground">
-                        {session.user.email}
+                        {user.email}
                       </p>
                     )}
                   </div>
@@ -178,7 +184,7 @@ export function Header() {
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem
-                  onClick={() => signOut({ callbackUrl: "/" })}
+                  onClick={handleSignOut}
                   className="text-red-600 focus:text-red-600"
                 >
                   <LogOut className="mr-2 h-4 w-4" />

@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Dialog,
   DialogContent,
@@ -6,7 +8,7 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { signIn } from "next-auth/react";
+import { createClient } from "@/lib/supabase/client";
 
 const SIgninDialog = ({
   openDialog,
@@ -15,6 +17,23 @@ const SIgninDialog = ({
   openDialog: boolean;
   closeDialog: (value: boolean) => void;
 }) => {
+  const supabase = createClient();
+
+  const handleGoogleSignIn = async () => {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: `${
+          window.location.origin
+        }/auth/callback?redirectTo=${encodeURIComponent(window.location.href)}`,
+      },
+    });
+
+    if (error) {
+      console.error("Google sign-in error:", error.message);
+    }
+  };
+
   return (
     <Dialog open={openDialog} onOpenChange={closeDialog}>
       <DialogContent className="sm:max-w-[425px]">
@@ -28,9 +47,7 @@ const SIgninDialog = ({
         <div className="grid gap-4 py-4">
           <Button
             variant="outline"
-            onClick={() =>
-              signIn("google", { callbackUrl: window.location.href })
-            }
+            onClick={handleGoogleSignIn}
             className="w-full py-4"
           >
             Sign in with Google
